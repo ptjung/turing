@@ -10,8 +10,6 @@ setscreen ("graphics:500;500")
 %%%%%
 
 % Declarations
-const midx := maxx div 2
-const midy := maxy div 2
 const drawColour := 17
 const squareColour := 32
 
