@@ -6,12 +6,7 @@ setscreen ("graphics:500;500")
 %       Version:    2019-03-17
 %   Description:    This program visualizes the inscribed square problem (aka. square peg problem, Toeplitz' conjecture), which asks if
 %                   every simple closed curve contains all four verticles of some square; it will find the first square of the user's
-%                   drawing, upon pressing the UP arrow key. The DOWN arrow key erases everything.
-%
-%                   This program is not made to keep up with very fast doodles; it is recommended that the user draws slowly, so that
-%                   the drawing is fully filled. The program's performance is based on how much has been drawn on the screen and the
-%                   size of the shape.
-%
+%                   drawing on a 500 * 500 plane, upon pressing the UP arrow key. The DOWN arrow key erases everything.
 %%%%%
 
 % Declarations
@@ -20,21 +15,20 @@ const midy := maxy div 2
 const drawColour := 17
 const squareColour := 32
 
-% Function: calculate the longest distance from one dot to a set of dots and return that value
-function calcLongestDist (currX : int, currY : int) : real
-    var maxDist, currDist : real := 0
-    for x : 1 .. maxx
-        for y : 1 .. maxy
-            if whatdotcolour (x, y) = drawColour then
-                currDist := sqrt ((currX - x) ** 2 + (currY - y) ** 2)
-                if maxDist < currDist then
-                    maxDist := currDist
-                end if
+var arbitraryTestPoints : array 1 .. maxx, 1 .. maxy of boolean
+
+% Procedure:
+procedure getAribtraryTestPoints
+    for currX : 1 .. maxx
+        for currY : 1 .. maxy
+            if whatdotcolour (currX, currY) = drawColour then
+                arbitraryTestPoints (currX, currY) := true
+            else
+                arbitraryTestPoints (currX, currY) := false
             end if
         end for
     end for
-    result maxDist
-end calcLongestDist
+end getAribtraryTestPoints
 
 % Procedure: draws a polygon, given the x and y coordinates of four points, and a colour
 procedure drawPolygon (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py3 : int, px4 : int, py4 : int, customColour : int)
@@ -54,7 +48,10 @@ end drawPolygon
 % Procedure: checks and draws a possible square (with side lengths starting from minRad units) on the user's drawing
 procedure checkDrawForSquare (minRad : int)
     const rev := Math.PI * 2
-    var pointOnX1, pointOnY1, pointOnX2, pointOnY2, pointOnX3, pointOnY3 : int
+    var pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY : int
+    var distBtwPoints, degree : real
+
+    getAribtraryTestPoints
 
     % Tests with possible coordinates with every side lengths (minRad to maxRad units) of the possible square
     for currX : 1 .. maxx
@@ -63,32 +60,36 @@ procedure checkDrawForSquare (minRad : int)
             % Tests if the current point is filled; if so, continue
             if whatdotcolour (currX, currY) = drawColour then
 
-                for sideLength : minRad .. round (calcLongestDist (currX, currY))
+                for pointOnForwX : 1 .. maxx
+                    for pointOnForwY : 1 .. maxy
+                        if arbitraryTestPoints (pointOnForwX, pointOnForwY) then
+                            distBtwPoints := sqrt ((currX - pointOnForwX) ** 2 + (currY - pointOnForwY) ** 2)
+                            if distBtwPoints > 5 and (pointOnForwX - currX) not= 0 then
+                                degree := arctan ((pointOnForwY - currY) / (pointOnForwX - currX)) * (180 / Math.PI)
 
-                    % Rotates a square about the current point (as the pivot), and tests if all three other points on the square match are on the plane and filled
-                    for degree : 0 .. 359
-                        pointOnX1 := currX + round (cos (degree / 360 * rev) * sideLength)
-                        pointOnY1 := currY + round (sin (degree / 360 * rev) * sideLength)
+                                for side : -1 .. 1 by 2
+                                    pointOnHoriX := currX + round (cos ((degree + 90 * side) / 360 * rev) * distBtwPoints)
+                                    pointOnHoriY := currY + round (sin ((degree + 90 * side) / 360 * rev) * distBtwPoints)
 
-                        if (pointOnX1 >= 1 and pointOnX1 <= maxx) and (pointOnY1 >= 1 and pointOnY1 <= maxy) and whatdotcolour (pointOnX1, pointOnY1) = drawColour then
-                            pointOnX2 := currX + round (cos ((degree - 90) / 360 * rev) * sideLength)
-                            pointOnY2 := currY + round (sin ((degree - 90) / 360 * rev) * sideLength)
+                                    if whatdotcolour (pointOnHoriX, pointOnHoriY) = drawColour then
+                                        pointOnDiagX := currX + round (cos ((degree + 45 * side) / 360 * rev) * distBtwPoints * sqrt (2))
+                                        pointOnDiagY := currY + round (sin ((degree + 45 * side) / 360 * rev) * distBtwPoints * sqrt (2))
 
-                            if (pointOnX2 >= 1 and pointOnX2 <= maxx) and (pointOnY2 >= 1 and pointOnY2 <= maxy) and whatdotcolour (pointOnX2, pointOnY2) = drawColour then
-                                pointOnX3 := currX + round (cos ((degree - 45) / 360 * rev) * sideLength * sqrt (2))
-                                pointOnY3 := currY + round (sin ((degree - 45) / 360 * rev) * sideLength * sqrt (2))
+                                        if whatdotcolour (pointOnDiagX, pointOnDiagY) = drawColour then
+                                            drawPolygon (currX, currY, pointOnForwX, pointOnForwY, pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, squareColour)
+                                            return
+                                        end if
 
-                                if (pointOnX3 >= 1 and pointOnX3 <= maxx) and (pointOnY3 >= 1 and pointOnY3 <= maxy) and whatdotcolour (pointOnX3, pointOnY3) = drawColour then
-                                    % All points on the square match previously filled points; therefore, the square exists, and is drawn
-                                    drawPolygon (currX, currY, pointOnX1, pointOnY1, pointOnX2, pointOnY2, pointOnX3, pointOnY3, squareColour)
-                                    return
-                                end if
-
+                                    end if
+                                end for
                             end if
                         end if
                     end for
                 end for
+
+                arbitraryTestPoints (currX, currY) := false
             end if
+
         end for
     end for
 end checkDrawForSquare
