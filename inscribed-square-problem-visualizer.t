@@ -15,7 +15,7 @@ const squareColour := 32
 
 var arbitraryTestPoints : array 1 .. maxx, 1 .. maxy of boolean
 
-% Procedure:
+% Procedure: initializes all arbitrary test points, that is, all points that have been colored by the user
 procedure getAribtraryTestPoints
     for currX : 1 .. maxx
         for currY : 1 .. maxy
@@ -49,18 +49,22 @@ procedure checkDrawForSquare (minRad : int)
     var pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY : int
     var distBtwPoints, degree : real
 
+    % Initialize arbitrary test points
     getAribtraryTestPoints
 
-    % Tests with possible coordinates with every side lengths (minRad to maxRad units) of the possible square
+    % Tests with possible coordinates
     for currX : 1 .. maxx
         for currY : 1 .. maxy
 
             % Tests if the current point is filled; if so, continue
             if whatdotcolour (currX, currY) = drawColour then
 
+                % Finds all other filled arbitrary points
                 for pointOnForwX : 1 .. maxx
                     for pointOnForwY : 1 .. maxy
                         if arbitraryTestPoints (pointOnForwX, pointOnForwY) then
+                        
+                            % Checks for other side lengths of the square horizontally and vertically, on both sides
                             distBtwPoints := sqrt ((currX - pointOnForwX) ** 2 + (currY - pointOnForwY) ** 2)
                             if distBtwPoints > 5 and (pointOnForwX - currX) not= 0 then
                                 degree := arctan ((pointOnForwY - currY) / (pointOnForwX - currX)) * (180 / Math.PI)
@@ -85,6 +89,7 @@ procedure checkDrawForSquare (minRad : int)
                     end for
                 end for
 
+                % The tested point should not be visited again, to avoid repetition
                 arbitraryTestPoints (currX, currY) := false
             end if
 
