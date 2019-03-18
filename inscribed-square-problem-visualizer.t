@@ -6,7 +6,11 @@ setscreen ("graphics:800;800")
 %       Version:    2019-03-17
 %   Description:    This program visualizes the inscribed square problem (aka. square peg problem, Toeplitz' conjecture), which asks if
 %                   every simple closed curve contains all four verticles of some square; it will find the first square of the user's
-%                   drawing on a 800 * 800 plane, if possible. Click the screen after the drawing has been tested to reset it.
+%                   drawing on a 800 * 800 plane, if possible.
+%                   
+%                   Left-click and hold down the button to draw a curve; upon letting go, the program will automatically test to check
+%                   if a single square exists on the curve, drawing it out if possible. The screen will be cleared upon the next 
+%                   left-click of the mouse, at which the program loops.
 %%%%%
 
 % Declarations
