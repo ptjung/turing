@@ -9,8 +9,8 @@ setscreen ("graphics:800;800")
 %                   drawing on a 800 * 800 plane, if possible.
 %                   
 %                   Left-click and hold down the button to draw a curve; upon letting go, the program will automatically test to check
-%                   if a single square exists on the curve, drawing it out if possible. The screen will be cleared upon the next 
-%                   left-click of the mouse, at which the program loops.
+%                   if a single square exists on the curve, drawing it out if possible. The screen will be cleared upon the next drawing
+%                   procedure, which is when the program loops.
 %%%%%
 
 % Declarations
