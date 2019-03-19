@@ -7,7 +7,7 @@ setscreen ("graphics:800;800")
 %   Description:    This program visualizes the inscribed square problem (aka. square peg problem, Toeplitz' conjecture), which asks if
 %                   every simple closed curve contains all four verticles of some square; it will find the first square of the user's
 %                   drawing on a 800 * 800 plane, if possible.
-%                   
+%
 %                   Left-click and hold down the button to draw a curve; upon letting go, the program will automatically test to check
 %                   if a single square exists on the curve, drawing it out if possible. The screen will be cleared upon the next drawing
 %                   procedure, which is when the program loops.
@@ -41,27 +41,32 @@ end getArbitraryTestPoints
 procedure drawEdgeCases (minToCenterX : int, maxToCenterX : int, minToCenterY : int, maxToCenterY : int)
     for decreasing currY : maxToCenterY .. minToCenterY
         for currX : minToCenterX .. maxToCenterX
-            if (whatdotcolour (currX, currY) = drawColour and whatdotcolour (currX - 1, currY - 1) = drawColour and whatdotcolour (currX - 1, currY) = white and whatdotcolour (currX, currY - 1) = white) then
+            if (whatdotcolour (currX, currY) = drawColour and whatdotcolour (currX - 1, currY - 1) = drawColour and whatdotcolour (currX - 1, currY) = white and whatdotcolour (currX, currY - 1) =
+                    white) then
                 drawdot (currX, currY - 1, drawColour)
-            elsif (whatdotcolour (currX, currY) = white and whatdotcolour (currX - 1, currY - 1) = white and whatdotcolour (currX - 1, currY) = drawColour and whatdotcolour (currX, currY - 1) = drawColour) then
+            elsif (whatdotcolour (currX, currY) = white and whatdotcolour (currX - 1, currY - 1) = white and whatdotcolour (currX - 1, currY) = drawColour and whatdotcolour (currX, currY - 1) =
+                    drawColour) then
                 drawdot (currX - 1, currY - 1, drawColour)
             end if
         end for
     end for
 end drawEdgeCases
 
-% Procedure: draws a polygon, given the x and y coordinates of four points, and a colour
-procedure drawPolygon (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py3 : int, px4 : int, py4 : int, customColour : int)
+% Procedure: draws a polygon, given the x and y coordinates of four points, a colour, and a side length
+procedure drawPolygon (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py3 : int, px4 : int, py4 : int, customColour : int, sideLength : real)
     const vertexRad := 2
 
     drawline (px1, py1, px2, py2, customColour)
     drawline (px1, py1, px3, py3, customColour)
     drawline (px2, py2, px4, py4, customColour)
     drawline (px3, py3, px4, py4, customColour)
-    drawfilloval (px1, py1, vertexRad, vertexRad, black)
-    drawfilloval (px2, py2, vertexRad, vertexRad, black)
-    drawfilloval (px3, py3, vertexRad, vertexRad, black)
-    drawfilloval (px4, py4, vertexRad, vertexRad, black)
+
+    if sideLength > 3.0 then
+        drawfilloval (px1, py1, vertexRad, vertexRad, black)
+        drawfilloval (px2, py2, vertexRad, vertexRad, black)
+        drawfilloval (px3, py3, vertexRad, vertexRad, black)
+        drawfilloval (px4, py4, vertexRad, vertexRad, black)
+    end if
 
 end drawPolygon
 
@@ -88,32 +93,27 @@ procedure checkDrawForSquare (minRad : int, percColumn : int, minToCenterX : int
 
                             % Checks for other side lengths of the square horizontally and vertically, on both sides
                             distBtwPoints := sqrt ((currX - pointOnForwX) ** 2 + (currY - pointOnForwY) ** 2)
-                            if distBtwPoints > 5 and (pointOnForwX - currX) not= 0 then
-                                degree := arctan ((pointOnForwY - currY) / (pointOnForwX - currX)) * (180 / Math.PI)
+                            if distBtwPoints >= 3 then
+                                degree := arctan ((pointOnForwY - currY) / (pointOnForwX - currX + 0.000001)) * (180 / Math.PI)
 
-                                for side : -1 .. 1 by 2
-                                    pointOnHoriX := currX + round (cos ((degree + 90 * side) / 360 * rev) * distBtwPoints)
-                                    pointOnHoriY := currY + round (sin ((degree + 90 * side) / 360 * rev) * distBtwPoints)
+                                pointOnHoriX := currX + round (cos ((degree + 90) / 360 * rev) * distBtwPoints)
+                                pointOnHoriY := currY + round (sin ((degree + 90) / 360 * rev) * distBtwPoints)
 
-                                    if whatdotcolour (pointOnHoriX, pointOnHoriY) = drawColour then
-                                        pointOnDiagX := currX + round (cos ((degree + 45 * side) / 360 * rev) * distBtwPoints * sqrt (2))
-                                        pointOnDiagY := currY + round (sin ((degree + 45 * side) / 360 * rev) * distBtwPoints * sqrt (2))
+                                if whatdotcolour (pointOnHoriX, pointOnHoriY) = drawColour then
+                                    pointOnDiagX := currX + round (cos ((degree + 45) / 360 * rev) * distBtwPoints * sqrt (2))
+                                    pointOnDiagY := currY + round (sin ((degree + 45) / 360 * rev) * distBtwPoints * sqrt (2))
 
-                                        if whatdotcolour (pointOnDiagX, pointOnDiagY) = drawColour then
-                                            drawPolygon (currX, currY, pointOnForwX, pointOnForwY, pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, squareColour)
-                                            return
-                                        end if
-
+                                    if whatdotcolour (pointOnDiagX, pointOnDiagY) = drawColour then
+                                        drawPolygon (currX, currY, pointOnForwX, pointOnForwY, pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, squareColour, distBtwPoints)
+                                        return
                                     end if
-                                end for
+
+                                end if
                             end if
 
                         end if
                     end for
                 end for
-
-                % The tested point should not be visited again, to avoid repetition
-                arbitraryTestPoints (currX, currY) := false
 
                 % Display percentage of checked points
                 locate (1, percColumn)
@@ -135,55 +135,55 @@ procedure main
     loop
         % Input via mouse
         mousewhere (drawXf, drawYf, drawB)
-        
+
         if (drawB = 1 and not hasDrawn) and (drawXf >= 1 and drawXf <= maxx) and (drawYf >= 1 and drawYf <= maxy) then
             % Upon button press, start drawing
             mousewhere (drawXi, drawYi, drawB)
             hasDrawn := true
-            
+
             % Some variables to improve efficiency through restricting the brute-forcing of all (x, y)
             minToCenterX := maxx div 2
             maxToCenterX := maxx div 2
             minToCenterY := maxy div 2
             maxToCenterY := maxy div 2
             cls
-            
+
         elsif drawB = 1 and hasDrawn then
             % Upon holding down the button, let the user drag and draw
             if (drawXf >= 1 and drawXf <= maxx) and (drawYf >= 1 and drawYf <= maxy) then
                 drawline (drawXi, drawYi, drawXf, drawYf, drawColour)
-                
+
                 % Restrict X
                 if minToCenterX > drawXf then
                     minToCenterX := drawXf
                 elsif maxToCenterX < drawXf then
                     maxToCenterX := drawXf
                 end if
-                
+
                 % Restrict Y
                 if minToCenterY > drawYf then
                     minToCenterY := drawYf
                 elsif maxToCenterY < drawYf then
                     maxToCenterY := drawYf
                 end if
-                
+
             end if
             drawXi := drawXf
             drawYi := drawYf
             drawB := 0
-            
+
         elsif drawB = 0 and hasDrawn then
             % Upon letting the button go, refine curve and test for an inscribed square
             put "REFINING CURVE..." ..
             drawEdgeCases (minToCenterX, maxToCenterX, minToCenterY, maxToCenterY)
-            
+
             locate (1, 1)
             put message + " 0% CHECKED" ..
             checkDrawForSquare (5, length (message) + 2, minToCenterX, maxToCenterX, minToCenterY, maxToCenterY)
             hasDrawn := false
             locate (1, length (message) + 2)
             put "FINISHED DRAWING."
-            
+
         end if
     end loop
 end main
