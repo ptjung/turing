@@ -11,9 +11,8 @@ setscreen ("graphics:800;800")
 % Declarations
 const midx := maxx div 2
 const midy := maxy div 2
-const pi := 3.1415927
 const multiplier := 1.01
-const step := 1 / (2 * pi)
+const step := 1 / (2 * Math.PI)
 
 var i, r : real := 0
 
