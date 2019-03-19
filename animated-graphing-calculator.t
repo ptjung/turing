@@ -46,6 +46,7 @@ const MIDY := PY div 2
 const LINE_OVERALL_X := MIDX div SCALE_STEPO
 const LINE_OVERALL_Y := MIDY div SCALE_STEPO
 
+% The ZERO_DIV_CONSTANT here provides calculations with a near-negligible value while avoiding any zero-divison errors that may cause the program to crash.
 const ZERO_DIV_CONSTANT := 0.0000001
 
 % Initialize: variables
