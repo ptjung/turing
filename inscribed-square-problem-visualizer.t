@@ -3,7 +3,7 @@ setscreen ("graphics:800;800")
 %%%%%
 %
 %        Author:    Patrick Jung
-%       Version:    2019-03-17
+%       Version:    2019-03-19
 %   Description:    This program visualizes the inscribed square problem (aka. square peg problem, Toeplitz' conjecture), which asks if
 %                   every simple closed curve contains all four verticles of some square; it will find the first square of the user's
 %                   drawing on a 800 * 800 plane, if possible.
@@ -37,6 +37,11 @@ function getArbitraryTestPoints (minToCenterX : int, maxToCenterX : int, minToCe
     result testPoints
 end getArbitraryTestPoints
 
+% Function: returns the distance between points on a cartesian plane
+function distBtwnPoints (x1 : real, y1 : real, x2 : real, y2 : real) : real
+    result sqrt ((y2 - y1) ** 2 + (x2 - x1) ** 2)
+end distBtwnPoints
+
 % Procedure: draw "edge cases" for curves, where edges are not properly filled, from top-to-bottom
 procedure drawEdgeCases (minToCenterX : int, maxToCenterX : int, minToCenterY : int, maxToCenterY : int)
     for decreasing currY : maxToCenterY .. minToCenterY
@@ -52,8 +57,8 @@ procedure drawEdgeCases (minToCenterX : int, maxToCenterX : int, minToCenterY : 
     end for
 end drawEdgeCases
 
-% Procedure: draws a polygon, given the x and y coordinates of four points, a colour, and a side length
-procedure drawPolygon (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py3 : int, px4 : int, py4 : int, customColour : int, sideLength : real)
+% Procedure: draws a quadrilateral, given the x and y coordinates of four points, a colour, and a side length
+procedure drawQuadrilateral (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py3 : int, px4 : int, py4 : int, customColour : int, sideLength : real)
     const vertexRad := 2
 
     drawline (px1, py1, px2, py2, customColour)
@@ -61,19 +66,20 @@ procedure drawPolygon (px1 : int, py1 : int, px2 : int, py2 : int, px3 : int, py
     drawline (px2, py2, px4, py4, customColour)
     drawline (px3, py3, px4, py4, customColour)
 
-    if sideLength > 3.0 then
+    if sideLength > 5.0 then
         drawfilloval (px1, py1, vertexRad, vertexRad, black)
         drawfilloval (px2, py2, vertexRad, vertexRad, black)
         drawfilloval (px3, py3, vertexRad, vertexRad, black)
         drawfilloval (px4, py4, vertexRad, vertexRad, black)
     end if
 
-end drawPolygon
+end drawQuadrilateral
 
 % Procedure: checks and draws a possible square (with side lengths starting from minRad units) on the user's drawing; displays percent of checked points
 procedure checkDrawForSquare (minRad : int, percColumn : int, minToCenterX : int, maxToCenterX : int, minToCenterY : int, maxToCenterY : int)
     const rev := Math.PI * 2
     var pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, testPoints, testedPoints : int := 0
+    var disCondDiag : boolean
     var distBtwPoints, degree : real
 
     % Initialize arbitrary test points
@@ -92,20 +98,27 @@ procedure checkDrawForSquare (minRad : int, percColumn : int, minToCenterX : int
                         if arbitraryTestPoints (pointOnForwX, pointOnForwY) then
 
                             % Checks for other side lengths of the square horizontally and vertically, on both sides
-                            distBtwPoints := sqrt ((currX - pointOnForwX) ** 2 + (currY - pointOnForwY) ** 2)
+                            distBtwPoints := distBtwnPoints (currX, currY, pointOnForwX, pointOnForwY)
                             if distBtwPoints >= 3 then
-                                degree := arctan ((pointOnForwY - currY) / (pointOnForwX - currX + 0.000001)) * (180 / Math.PI)
+                                degree := 180 + arctan ((pointOnForwY - currY) / (pointOnForwX - currX + 0.000001)) * (180 / Math.PI)
 
                                 pointOnHoriX := currX + round (cos ((degree + 90) / 360 * rev) * distBtwPoints)
                                 pointOnHoriY := currY + round (sin ((degree + 90) / 360 * rev) * distBtwPoints)
 
                                 if whatdotcolour (pointOnHoriX, pointOnHoriY) = drawColour then
-                                    pointOnDiagX := currX + round (cos ((degree + 45) / 360 * rev) * distBtwPoints * sqrt (2))
-                                    pointOnDiagY := currY + round (sin ((degree + 45) / 360 * rev) * distBtwPoints * sqrt (2))
+                                    pointOnDiagX := pointOnHoriX + round (cos (degree / 360 * rev) * distBtwPoints)
+                                    pointOnDiagY := pointOnHoriY + round (sin (degree / 360 * rev) * distBtwPoints)
 
                                     if whatdotcolour (pointOnDiagX, pointOnDiagY) = drawColour then
-                                        drawPolygon (currX, currY, pointOnForwX, pointOnForwY, pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, squareColour, distBtwPoints)
-                                        return
+                                    
+                                        % disCondDiag is used to check for any unusual patterns in the square about to be created
+                                        disCondDiag := distBtwnPoints (currX, currY, pointOnDiagX, pointOnDiagY) / sqrt (2) = distBtwnPoints (pointOnForwX, pointOnForwY, pointOnDiagX, pointOnDiagY)
+
+                                        if disCondDiag then
+                                            drawQuadrilateral (currX, currY, pointOnForwX, pointOnForwY, pointOnHoriX, pointOnHoriY, pointOnDiagX, pointOnDiagY, squareColour, distBtwPoints)
+                                            return
+                                        end if
+
                                     end if
 
                                 end if
