@@ -10,6 +10,12 @@ A basic graphing calculator made for animation purposes. For users, you must man
 <a href="https://github.com/PtJung/Turing/blob/master/animated-graphing-calculator.t">Link</a>, updated last on March 19, 2019.
 <hr>
 
+#### Animated Shapes About a Disk
+Throughout playing with shapes about a disk, I ended up creating shapes that had a 3D feeling to them. I achieved this through nesting trigonometric functions inside other trigonometric functions, with an inverse tangent function in the last. All of these lines are relative to an imaginary oval in the center of the screen.
+
+<a href="https://github.com/PtJung/Turing/blob/master/animated-shapes-about-a-disk.t">Link</a>, updated last on April 7, 2019.
+<hr>
+
 #### Animated Spiral Drawer
 An animated trigonometric spiral that expands from the center of the screen indefinitely, made up of lines throughout. I used the unit circle as a reference, and for each degree, I add on 1% of its current radius to create a new radius, which creates the "exponential effect".
 
