@@ -23,6 +23,7 @@ This program works by prompting the user for some drawing. The drawing is then r
 
 <a href="https://github.com/PtJung/Turing/blob/master/inscribed-square-problem-visualizer.t">Link</a>, updated last on March 19, 2019.
 </pre>
+<hr>
 
 #### Animated Spiral Drawer
 An animated trigonometric spiral that expands from the center of the screen indefinitely, made up of lines throughout. I used the unit circle as a reference, and for each degree, I add on 1% of its current radius to create a new radius, which creates the "exponential effect".
@@ -30,4 +31,3 @@ An animated trigonometric spiral that expands from the center of the screen inde
 All lines were originally made to connect to each other, but playing around with what the lines had connected to allowed me to create such a pattern.
 
 <a href="https://github.com/PtJung/Turing/blob/master/animated-spiral-drawer.t">Link</a>, updated last on March 19, 2019.
-<hr>
