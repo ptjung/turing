@@ -4,24 +4,16 @@ A repository for my solo Turing projects.
 
 <hr>
 
+#### Neural Network
+The first ever neural network in Turing! This includes a test program and a neural network class -- it takes in sets of input and output from the named .txt files in its directory. Then, new output is generated over input from the user interface. Please note that this program is still in development and changes to the number constants may result in compiler crashes.
+
+<a href="https://github.com/PtJung/Turing/tree/master/neural-network">Link</a>, updated last on August 9, 2019.
+<hr>
+
 #### Animated Graphing Calculator
 A basic graphing calculator made for animation purposes. For users, you must manually complete the right side of the equation on line <b>20</b> to begin usage, using any of <tt>x</tt> or <tt>k</tt>. View the documentation for the function <tt>getEquationRS()</tt> for more information.
 
 <a href="https://github.com/PtJung/Turing/blob/master/animated-graphing-calculator.t">Link</a>, updated last on March 19, 2019.
-<hr>
-
-#### Animated Shapes About a Disk
-Throughout playing with shapes about a disk, I ended up creating shapes that had a 3D feeling to them. I achieved this through nesting trigonometric functions inside other trigonometric functions, with an inverse tangent function in the last. All of these lines are relative to an imaginary oval in the center of the screen.
-
-<a href="https://github.com/PtJung/Turing/blob/master/animated-shapes-about-a-disk.t">Link</a>, updated last on April 7, 2019.
-<hr>
-
-#### Animated Spiral Drawer
-An animated trigonometric spiral that expands from the center of the screen indefinitely, made up of lines throughout. I used the unit circle as a reference, and for each degree, I add on 1% of its current radius to create a new radius, which creates the "exponential effect".
-
-All lines were originally made to connect to each other, but playing around with what the lines had connected to allowed me to create such a pattern.
-
-<a href="https://github.com/PtJung/Turing/blob/master/animated-spiral-drawer.t">Link</a>, updated last on March 19, 2019.
 <hr>
 
 #### Inscribed Square Problem Visualizer
@@ -31,3 +23,11 @@ This program works by prompting the user for some drawing. The drawing is then r
 
 <a href="https://github.com/PtJung/Turing/blob/master/inscribed-square-problem-visualizer.t">Link</a>, updated last on March 19, 2019.
 </pre>
+
+#### Animated Spiral Drawer
+An animated trigonometric spiral that expands from the center of the screen indefinitely, made up of lines throughout. I used the unit circle as a reference, and for each degree, I add on 1% of its current radius to create a new radius, which creates the "exponential effect".
+
+All lines were originally made to connect to each other, but playing around with what the lines had connected to allowed me to create such a pattern.
+
+<a href="https://github.com/PtJung/Turing/blob/master/animated-spiral-drawer.t">Link</a>, updated last on March 19, 2019.
+<hr>
