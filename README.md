@@ -10,7 +10,7 @@ The first ever neural network in Turing! This includes a test program and a neur
 <a href="https://github.com/PtJung/Turing/tree/master/neural-network">Link</a>, updated last on August 9, 2019.
 
 #### Credits
-This neural network is based off of the code in <a href="https://www.kdnuggets.com/2018/10/simple-neural-network-python.html">this article</a>, built by **Dr. Michael J. Garbade**.
+The code used in this neural network is based on the code in <a href="https://www.kdnuggets.com/2018/10/simple-neural-network-python.html">this article</a>, built by **Dr. Michael J. Garbade**.
 <hr>
 
 #### Animated Graphing Calculator
