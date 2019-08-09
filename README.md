@@ -7,10 +7,10 @@ A repository for my solo Turing projects.
 #### Neural Network
 The first ever neural network in Turing! This includes a test program and a neural network class -- it takes in sets of input and output from the named .txt files in its directory. Then, new output is generated over input from the user interface. Please note that this program is still in development and changes to the number constants may result in compiler crashes.
 
-#### Credits
-The <a href="https://www.kdnuggets.com/2018/10/simple-neural-network-python.html">original code</a>that was based off of was built by **Dr. Michael J. Garbade**. 
-
 <a href="https://github.com/PtJung/Turing/tree/master/neural-network">Link</a>, updated last on August 9, 2019.
+
+#### Credits
+This neural network is based off of the code in <a href="https://www.kdnuggets.com/2018/10/simple-neural-network-python.html">this article</a>, built by **Dr. Michael J. Garbade**.
 <hr>
 
 #### Animated Graphing Calculator
