@@ -5,7 +5,7 @@ A repository for my solo Turing projects.
 <hr>
 
 #### Neural Network
-The first ever neural network in Turing! This includes a test program and a neural network class -- it takes in sets of input and output from the named .txt files in its directory. Then, new output is generated over input (in the form <tt><i>i{ i}</i></tt>) from the user interface.
+The first ever neural network in Turing! This includes a test program and a neural network class -- it takes in sets of input and output from the named <tt>.txt</tt> files in its directory. Then, new output is generated over input (<tt><i>i{ i}</i></tt>) from the user interface. Please note that the input <tt>.txt</tt> file can accept multiple input parameters (columns), but the output <tt>.txt</tt> file can accept only one parameter.
 
 <a href="https://github.com/PtJung/Turing/tree/master/neural-network">Link</a>, updated last on August 9, 2019.
 
